@@ -35,7 +35,7 @@ def create_access_key():
         response.raise_for_status()
         return response.json()["accessUrl"], response.json()["id"]
     except requests.exceptions.RequestException as e:
-        logger.error(f"❌ Failed to create access key: {e}")
+        logger.error(f"Failed to create access key: {e}")
         return None, None
     
 def rename_access_key(id, name):
@@ -43,7 +43,7 @@ def rename_access_key(id, name):
         response = requests.put(f"{OUTLINE_API_URL}/{OUTLINE_API_SECRET}/access-keys/{id}/name", data={"name": name}, verify=False)
         response.raise_for_status()
     except requests.exceptions.RequestException as e:
-        logger.error(f"❌ Failed to rename access key: {e}")
+        logger.error(f"Failed to rename access key: {e}")
         return None
 
 
@@ -61,9 +61,9 @@ Just paste it into the Outline client to get started.
     try:
         yag = yagmail.SMTP(GMAIL_USER, GMAIL_APP_PASSWORD)
         yag.send(to=recipient, subject=subject, contents=body)
-        logger.info(f"✅ Email sent to {recipient}")
+        logger.info(f"Email sent to {recipient}")
     except Exception as e:
-        logger.error(f"❌ Failed to send email to {recipient}: {e}")
+        logger.error(f"Failed to send email to {recipient}: {e}")
         
 
 def main():
@@ -78,7 +78,7 @@ def main():
             access_url, id = create_access_key()
             
             if not access_url:
-                logger.warning(f"⚠️ Skipping {name} due to access key generation failure.")
+                logger.warning(f"Skipping {name} due to access key generation failure.")
                 continue
             
             logger.info(f"Renaming generated access key to {name}...")
@@ -88,7 +88,7 @@ def main():
             if email:
                 send_email(email, name, access_url)
             else:
-                logger.warning(f"ℹ️ No email provided for {name}, key not sent.")
+                logger.warning(f"No email provided for {name}, key not sent.")
 
 if __name__ == "__main__":
     main()
